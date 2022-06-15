@@ -9,7 +9,7 @@ minimizing the serialization that is introduced by synchronization, if any.
 unsigned int S[N], D[N], C[256];
 void iter_distribute(unsigned int *S, int n, unsigned int C[256], unsigned int *D) 
 {
-    omp_lock_t lock_c[N];
+    omp_lock_t lock_c[256];
     //1) Inicializamos
     for(int i = 0; i < N; ++i)
         omp_init_lock(&lock_c[i]);
@@ -20,7 +20,11 @@ void iter_distribute(unsigned int *S, int n, unsigned int C[256], unsigned int *
     //2) Region paralela
     #pragma omp parallel private(i, value)
     {
-        for (i=0; i<n; i++) {
+        
+        unsigned int myId = omp_get_thread_num();
+        unsigned int num_th = omp_get_num_threads();
+        
+        for (i=myId; i<n; i+=num_th) {
             //2.1) Calculamos indice
             value = S[i]%256;
             //2.2) Bloqueamos con lock
