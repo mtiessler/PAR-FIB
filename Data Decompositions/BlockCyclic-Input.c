@@ -20,6 +20,5 @@
             omp_unset_lock(&lockT[index]);
         }
     }
-
 }
 
