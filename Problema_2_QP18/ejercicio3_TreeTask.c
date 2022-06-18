@@ -34,9 +34,9 @@ void rec_distribute(unsigned int *S, int n, unsigned int C[256], unsigned int *D
 void main() {
 // ...
     preprocessing(S, C, N); // initialization of S and C
-// ...
+//  init locks -- 
     #pragma omp parallel
     #pragma omp single
     rec_distribute(S, N, C, D, 0);
-// ...
+// destroy locks --
 }
